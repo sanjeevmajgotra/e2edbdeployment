@@ -20,6 +20,10 @@ steps:
 - task: MSBuild@1
   inputs:
     solution: '**/*.sln'
+- task: CopyFiles@2
+  inputs:
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
@@ -32,4 +36,5 @@ steps:
     ConnectionString: 'Server=tcp:e2esqldbserver.database.windows.net,1433;Initial Catalog=e2esqldb;Persist Security Info=False;User ID=sqladmin;Password=admin@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
     deployType: 'DacpacTask'
     DeploymentAction: 'Publish'
+    DacpacFile: '$(Build.ArtifactStagingDirectory)\e2edbdeployment.dacpac'
     IpDetectionMethod: 'AutoDetect'
