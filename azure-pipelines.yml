@@ -22,15 +22,19 @@ steps:
     solution: '**/*.sln'
 
 - task: CopyFiles@2
+  displayName: 'Copy Files to: staging'
   inputs:
-    Contents: '$(Build.BinariesDirectory)\bin\debug\*'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: '**\bin\$(buildConfiguration)\*.dacpac'
+    TargetFolder: '$(build.artifactstagingdirectory)'
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact :database'
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+    ArtifactName: '$(Parameters.ArtifactName)'
+  condition: succeededOrFailed()
+
 - task: SqlAzureDacpacDeployment@1
   inputs:
     azureSubscription: 'e2edemo'
@@ -38,5 +42,5 @@ steps:
     ConnectionString: 'Server=tcp:e2esqldbserver.database.windows.net,1433;Initial Catalog=e2esqldb;Persist Security Info=False;User ID=sqladmin;Password=admin@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
     deployType: 'DacpacTask'
     DeploymentAction: 'Publish'
-    DacpacFile: '$(Build.ArtifactStagingDirectory)\e2edbdeployment.dacpac'
+    DacpacFile: '$(build.artifactstagingdirectory)/**/e2edbdeployment.dacpac'
     IpDetectionMethod: 'AutoDetect'
