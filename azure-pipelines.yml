@@ -24,7 +24,7 @@ steps:
   inputs:
     solution: '**\*.sln'
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
-    platform: 'x64'
+    platform: 'any cpu'
     configuration: 'release'
 
 - task: CopyFiles@2
