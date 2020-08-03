@@ -4,5 +4,5 @@
     [firstname] VARCHAR(50) NOT NULL, 
     [lastname] VARCHAR(50) NOT NULL, 
     [dateofbirth] DATE NOT NULL, 
-    [customersince] DATE NULL
+    [customersince] DATE NOT NULL
 )
