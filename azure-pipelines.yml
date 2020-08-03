@@ -6,9 +6,6 @@
 trigger:
 - none
 
-
-trigger: none
-
 pool:
   name: Azure Pipelines
   demands:
