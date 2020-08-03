@@ -6,20 +6,41 @@
 trigger:
 - none
 
+
+trigger: none
+
 pool:
-  vmImage: 'windows-latest'
+  name: Azure Pipelines
+  demands:
+  - msbuild
+  - visualstudio
+  - sqlpackage
+
+#Your build pipeline references an undefined variable named ‘Parameters.solution’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named ‘Parameters.solution’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references the ‘BuildPlatform’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references an undefined variable named ‘buildConfiguration’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references an undefined variable named ‘Parameters.ArtifactName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
-- task: MSBuild@1
+- task: NuGetToolInstaller@0
+  displayName: 'Use NuGet 4.4.1'
   inputs:
-    solution: '**/*.sln'
+    versionSpec: 4.4.1
+
+- task: NuGetCommand@2
+  displayName: 'NuGet restore'
+  inputs:
+    restoreSolution: '$(Parameters.solution)'
+
+- task: VSBuild@1
+  displayName: 'Build solution'
+  inputs:
+    solution: '$(Parameters.solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\\"'
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: staging'
