@@ -36,11 +36,11 @@ steps:
   condition: succeededOrFailed()
 
 - task: SqlAzureDacpacDeployment@1
+  displayName: 'Azure SQL DacpacTask'
   inputs:
-    azureSubscription: 'e2edemo'
-    AuthenticationType: 'connectionString'
-    ConnectionString: 'Server=tcp:e2esqldbserver.database.windows.net,1433;Initial Catalog=e2esqldb;Persist Security Info=False;User ID=sqladmin;Password=admin@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-    deployType: 'DacpacTask'
-    DeploymentAction: 'Publish'
+    azureSubscription: e2edemo
+    ServerName: e2esqldbserver.database.windows.net
+    DatabaseName: e2esqldb
+    SqlUsername: sqladmin
+    SqlPassword: 'admin@123'
     DacpacFile: '$(build.artifactstagingdirectory)/**/e2edbdeployment.dacpac'
-    IpDetectionMethod: 'AutoDetect'
