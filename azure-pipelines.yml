@@ -31,7 +31,7 @@ steps:
   displayName: 'Copy Files to: staging'
   inputs:
     SourceFolder: '$(system.defaultworkingdirectory)'
-    Contents: '**\bin\$(buildConfiguration)\*.dacpac'
+    Contents: '**\*.dacpac'
     TargetFolder: '$(build.artifactstagingdirectory)'
 
 - task: PublishBuildArtifacts@1
